@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../theme.dart';
+import '../home_bloc.dart';
 
 class ResetButton extends StatelessWidget {
   @override
@@ -19,7 +21,7 @@ class ResetButton extends StatelessWidget {
               ),
               color: Styles.resetButtonColor,
               shape: StadiumBorder(),
-              onPressed: () {},
+              onPressed: () => Provider.of<CounterBloc>(context).reset(),
             ),
           ),
         );

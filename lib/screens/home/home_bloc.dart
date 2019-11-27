@@ -1,12 +1,14 @@
 import 'dart:async';
 
-import 'package:swipe_counter/data/local_storage.dart';
+import '../../constants.dart';
+import '../../data/local_storage.dart';
 
 abstract class CounterBloc {
   int get counter;
   Stream<int> get $counter;
   void increase();
   void decrease();
+  void reset();
   void dispose();
 }
 
@@ -48,6 +50,12 @@ class HomeBloc implements CounterBloc {
   @override
   void increase() async {
     _counter++;
+    _counterController.sink.add(_counter);
+    await _repository.saveValue(_counter);
+  }
+
+  void reset() async {
+    _counter = kDefaultCounterValue;
     _counterController.sink.add(_counter);
     await _repository.saveValue(_counter);
   }
