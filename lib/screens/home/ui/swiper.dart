@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../home_bloc.dart';
 import 'swipe_card.dart';
 
 class Swiper extends StatefulWidget {
@@ -39,21 +41,33 @@ class _SwiperState extends State<Swiper> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final counterBloc = Provider.of<CounterBloc>(context);
     return Draggable(
       axis: Axis.horizontal,
       child: ScaleTransition(
         scale: _animation,
-        child: SwipeCard(edgeSize: widget.maxEdgeSize),
+        child: SwipeCard(
+          edgeSize: widget.maxEdgeSize,
+          counterBloc: counterBloc,
+        ),
       ),
       onDragEnd: (details) {
-        if (details.offset.dx > widget.constraints.maxWidth * 0.9 ||
-            details.offset.dx < -widget.constraints.maxWidth * 0.5) {
+        if (details.offset.dx > widget.constraints.maxWidth * 0.9) {
+          counterBloc.increase();
+          _controller
+            ..reset()
+            ..forward();
+        } else if (details.offset.dx < -widget.constraints.maxWidth * 0.5) {
+          counterBloc.decrease();
           _controller
             ..reset()
             ..forward();
         }
       },
-      feedback: SwipeCard(edgeSize: widget.maxEdgeSize),
+      feedback: SwipeCard(
+        edgeSize: widget.maxEdgeSize,
+        counterBloc: counterBloc,
+      ),
       childWhenDragging: Container(),
     );
   }
