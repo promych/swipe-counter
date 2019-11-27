@@ -19,8 +19,12 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(
+      theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Styles.scaffoldBackgroundColor,
+        textTheme: TextTheme().copyWith(
+          title: TextStyle(fontSize: 32.0),
+          button: TextStyle(fontSize: 24.0),
+        ),
       ),
       home: HomePage(),
     );
