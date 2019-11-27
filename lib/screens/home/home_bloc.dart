@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:swipe_counter/data/local_storage.dart';
+
 abstract class CounterBloc {
   int get counter;
   Stream<int> get $counter;
@@ -9,7 +11,9 @@ abstract class CounterBloc {
 }
 
 class HomeBloc implements CounterBloc {
-  int _counter = 0;
+  CounterRepo _repository;
+  int _counter;
+
   @override
   int get counter => _counter;
 
@@ -17,8 +21,16 @@ class HomeBloc implements CounterBloc {
   @override
   Stream<int> get $counter => _counterController.stream;
 
-  void load() {
-    _counterController.sink.add(_counter);
+  Future<int> get savedValue async {
+    _repository = LocalStorage();
+    return await _repository.value;
+  }
+
+  void load() async {
+    await savedValue.then((value) {
+      _counter = value;
+      _counterController.sink.add(_counter);
+    });
   }
 
   @override
@@ -27,14 +39,16 @@ class HomeBloc implements CounterBloc {
   }
 
   @override
-  void decrease() {
+  void decrease() async {
     _counter--;
     _counterController.sink.add(_counter);
+    await _repository.saveValue(_counter);
   }
 
   @override
-  void increase() {
+  void increase() async {
     _counter++;
     _counterController.sink.add(_counter);
+    await _repository.saveValue(_counter);
   }
 }
