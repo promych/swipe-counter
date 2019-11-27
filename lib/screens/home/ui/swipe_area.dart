@@ -15,7 +15,9 @@ class SwipeArea extends StatelessWidget {
             const _SwipeDirectionMarker(label: '+'),
           ],
         ),
-        Swiper(),
+        LayoutBuilder(
+          builder: (context, constraints) => Swiper(constraints: constraints),
+        ),
       ],
     );
   }

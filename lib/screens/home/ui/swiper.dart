@@ -1,26 +1,60 @@
 import 'package:flutter/material.dart';
 
-class Swiper extends StatelessWidget {
+import 'swipe_card.dart';
+
+class Swiper extends StatefulWidget {
+  final BoxConstraints constraints;
+  final double maxEdgeSize;
+
+  Swiper({Key key, @required this.constraints})
+      : maxEdgeSize = constraints.maxWidth * 0.6;
+
+  @override
+  _SwiperState createState() => _SwiperState();
+}
+
+class _SwiperState extends State<Swiper> with TickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 250),
+    )..addListener(() => setState(() {}));
+
+    _animation = CurvedAnimation(curve: Curves.easeIn, parent: _controller);
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constrains) {
-        final initSize = constrains.maxWidth * 0.6;
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40.0),
-          ),
-          elevation: 4.0,
-          child: Container(
-            height: initSize,
-            width: initSize,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(40.0),
-            ),
-          ),
-        );
+    return Draggable(
+      axis: Axis.horizontal,
+      child: ScaleTransition(
+        scale: _animation,
+        child: SwipeCard(edgeSize: widget.maxEdgeSize),
+      ),
+      onDragEnd: (details) {
+        if (details.offset.dx > widget.constraints.maxWidth * 0.9 ||
+            details.offset.dx < -widget.constraints.maxWidth * 0.5) {
+          _controller
+            ..reset()
+            ..forward();
+        }
       },
+      feedback: SwipeCard(edgeSize: widget.maxEdgeSize),
+      childWhenDragging: Container(),
     );
   }
 }
