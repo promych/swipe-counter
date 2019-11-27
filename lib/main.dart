@@ -23,10 +23,11 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor: Styles.scaffoldBackgroundColor,
         textTheme: TextTheme().copyWith(
           title: TextStyle(fontSize: 32.0),
+          headline: TextStyle(fontSize: 24.0, color: Colors.black),
           button: TextStyle(fontSize: 24.0),
         ),
       ),
-      home: HomePage(),
+      home: HomePage.create(context),
     );
   }
 }
