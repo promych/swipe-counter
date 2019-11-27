@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'screens/home/home.dart';
 import 'theme.dart';
 
 void main() => runApp(App());
@@ -11,7 +12,7 @@ class App extends StatelessWidget {
       theme: ThemeData.light().copyWith(
         scaffoldBackgroundColor: Styles.scaffoldBackgroundColor,
       ),
-      home: Container(),
+      home: HomePage(),
     );
   }
 }
