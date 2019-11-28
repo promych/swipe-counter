@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import '../../constants.dart';
 import '../../data/local_storage.dart';
 
 abstract class CounterBloc {
   int get counter;
   Stream<int> get $counter;
+  void load();
   void increase();
   void decrease();
   void reset();
@@ -13,9 +16,11 @@ abstract class CounterBloc {
 }
 
 class HomeBloc implements CounterBloc {
-  CounterRepo _repository;
-  int _counter;
+  final CounterRepo repo;
 
+  HomeBloc({@required this.repo});
+
+  int _counter;
   @override
   int get counter => _counter;
 
@@ -23,13 +28,9 @@ class HomeBloc implements CounterBloc {
   @override
   Stream<int> get $counter => _counterController.stream;
 
-  Future<int> get savedValue async {
-    _repository = LocalStorage();
-    return await _repository.value;
-  }
-
+  @override
   void load() async {
-    await savedValue.then((value) {
+    await repo.value.then((value) {
       _counter = value;
       _counterController.sink.add(_counter);
     });
@@ -44,19 +45,19 @@ class HomeBloc implements CounterBloc {
   void decrease() async {
     _counter--;
     _counterController.sink.add(_counter);
-    await _repository.saveValue(_counter);
+    await repo.saveValue(_counter);
   }
 
   @override
   void increase() async {
     _counter++;
     _counterController.sink.add(_counter);
-    await _repository.saveValue(_counter);
+    await repo.saveValue(_counter);
   }
 
   void reset() async {
     _counter = kDefaultCounterValue;
     _counterController.sink.add(_counter);
-    await _repository.saveValue(_counter);
+    await repo.saveValue(_counter);
   }
 }
