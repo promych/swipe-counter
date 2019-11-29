@@ -52,12 +52,12 @@ class _SwiperState extends State<Swiper> with TickerProviderStateMixin {
         ),
       ),
       onDragEnd: (details) {
-        if (details.offset.dx > widget.constraints.maxWidth * 0.9) {
+        if (details.offset.dx > widget.constraints.maxWidth * 0.7) {
           counterBloc.increase();
           _controller
             ..reset()
             ..forward();
-        } else if (details.offset.dx < -widget.constraints.maxWidth * 0.5) {
+        } else if (details.offset.dx < -widget.constraints.maxWidth * 0.3) {
           counterBloc.decrease();
           _controller
             ..reset()

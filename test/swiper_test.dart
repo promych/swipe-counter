@@ -49,11 +49,11 @@ void main() {
     await pumpSwiper(tester);
     expect(find.text('0'), findsOneWidget);
 
-    await tester.drag(find.byType(Draggable), Offset(-100.0, 0.0));
+    await tester.drag(find.byType(Draggable), Offset(-50.0, 0.0));
     await tester.pumpAndSettle();
     expect(find.text('0'), findsOneWidget);
 
-    await tester.drag(find.byType(Draggable), Offset(-400.0, 0.0));
+    await tester.drag(find.byType(Draggable), Offset(-100.0, 0.0));
     await tester.pumpAndSettle();
     expect(find.text('-1'), findsOneWidget);
   });
