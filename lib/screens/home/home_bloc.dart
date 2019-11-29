@@ -29,7 +29,7 @@ class HomeBloc implements CounterBloc {
   Stream<int> get $counter => _counterController.stream;
 
   @override
-  void load() async {
+  Future<void> load() async {
     await repo.value.then((value) {
       _counter = value;
       _counterController.sink.add(_counter);
@@ -37,25 +37,26 @@ class HomeBloc implements CounterBloc {
   }
 
   @override
-  dispose() {
+  void dispose() {
     _counterController.close();
   }
 
   @override
-  void decrease() async {
+  Future<void> decrease() async {
     _counter--;
     _counterController.sink.add(_counter);
     await repo.saveValue(_counter);
   }
 
   @override
-  void increase() async {
+  Future<void> increase() async {
     _counter++;
     _counterController.sink.add(_counter);
     await repo.saveValue(_counter);
   }
 
-  void reset() async {
+  @override
+  Future<void> reset() async {
     _counter = kDefaultCounterValue;
     _counterController.sink.add(_counter);
     await repo.saveValue(_counter);
